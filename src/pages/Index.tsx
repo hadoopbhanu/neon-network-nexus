@@ -1,6 +1,6 @@
 
 import { useEffect, useRef, useState } from 'react';
-import { useInView, staggeredAnimations } from '@/utils/animations';
+import { staggeredAnimations } from '@/utils/animations';
 import { cn } from '@/lib/utils';
 import Navbar from '@/components/Navbar';
 import NetworkVisualization from '@/components/NetworkVisualization';
@@ -155,14 +155,6 @@ const Index = () => {
               View Documentation
             </button>
           </div>
-          
-          {/* Status Panel */}
-          <div className={cn(
-            "transform transition-all duration-700 delay-500",
-            loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-          )}>
-            <StatusPanel />
-          </div>
         </div>
         
         {/* Scroll indicator */}
@@ -175,9 +167,21 @@ const Index = () => {
         </div>
       </section>
       
+      {/* Status Dashboard Section - Moved to center and enlarged */}
+      <section className="py-10 px-6 lg:px-10 relative">
+        <div className="max-w-5xl mx-auto">
+          <div className={cn(
+            "transform transition-all duration-700 delay-500",
+            loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+          )}>
+            <StatusPanel />
+          </div>
+        </div>
+      </section>
+      
       {/* Features Section */}
       <section 
-        ref={featuresRef} 
+        ref={featuresRef}
         id="features" 
         className="py-20 px-6 lg:px-10 relative"
       >

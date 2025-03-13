@@ -1,7 +1,8 @@
 
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { CircuitBoard, Layers, Network, Lock, Server, Settings, User } from 'lucide-react';
+import { CircuitBoard, Layers, Network, Lock, Server, Settings, User, Info } from 'lucide-react';
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -23,30 +24,31 @@ const Navbar = () => {
     )}>
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo */}
-        <a href="/" className="flex items-center space-x-2">
+        <Link to="/" className="flex items-center space-x-2">
           <Network className="w-8 h-8 text-esnet-blue" />
           <span className="text-xl font-medium tracking-tight">
             <span className="text-white">ES.</span>
             <span className="text-gradient-blue">Net</span>
           </span>
-        </a>
+        </Link>
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center space-x-1">
           {[
-            { name: 'Network', icon: <CircuitBoard className="w-4 h-4" /> },
-            { name: 'Services', icon: <Layers className="w-4 h-4" /> },
-            { name: 'Infrastructure', icon: <Server className="w-4 h-4" /> },
-            { name: 'Security', icon: <Lock className="w-4 h-4" /> },
+            { name: 'Network', icon: <CircuitBoard className="w-4 h-4" />, path: '/#network' },
+            { name: 'Services', icon: <Layers className="w-4 h-4" />, path: '/#services' },
+            { name: 'Infrastructure', icon: <Server className="w-4 h-4" />, path: '/#infrastructure' },
+            { name: 'Security', icon: <Lock className="w-4 h-4" />, path: '/#security' },
+            { name: 'About', icon: <Info className="w-4 h-4" />, path: '/about' },
           ].map((item, i) => (
-            <a 
+            <Link
               key={item.name}
-              href={`#${item.name.toLowerCase()}`}
+              to={item.path}
               className="px-4 py-2 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all duration-300 flex items-center space-x-1.5"
             >
               {item.icon}
               <span>{item.name}</span>
-            </a>
+            </Link>
           ))}
         </nav>
 
@@ -89,14 +91,15 @@ const Navbar = () => {
       )}>
         <div className="p-6 space-y-4">
           {[
-            { name: 'Network', icon: <CircuitBoard className="w-5 h-5" /> },
-            { name: 'Services', icon: <Layers className="w-5 h-5" /> },
-            { name: 'Infrastructure', icon: <Server className="w-5 h-5" /> },
-            { name: 'Security', icon: <Lock className="w-5 h-5" /> },
+            { name: 'Network', icon: <CircuitBoard className="w-5 h-5" />, path: '/#network' },
+            { name: 'Services', icon: <Layers className="w-5 h-5" />, path: '/#services' },
+            { name: 'Infrastructure', icon: <Server className="w-5 h-5" />, path: '/#infrastructure' },
+            { name: 'Security', icon: <Lock className="w-5 h-5" />, path: '/#security' },
+            { name: 'About', icon: <Info className="w-5 h-5" />, path: '/about' },
           ].map((item) => (
-            <a 
+            <Link
               key={item.name}
-              href={`#${item.name.toLowerCase()}`}
+              to={item.path}
               className="flex items-center space-x-3 p-3 rounded-lg hover:bg-white/5 transition-colors duration-200"
               onClick={() => setMobileMenuOpen(false)}
             >
@@ -104,7 +107,7 @@ const Navbar = () => {
                 {item.icon}
               </div>
               <span className="text-lg font-medium text-white">{item.name}</span>
-            </a>
+            </Link>
           ))}
         </div>
       </div>
