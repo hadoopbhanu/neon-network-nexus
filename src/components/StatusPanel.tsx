@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { Activity, Globe, Signal, Server, CircuitBoard, BarChart2, Map, Zap } from 'lucide-react';
@@ -70,15 +69,21 @@ const StatusPanel = () => {
     },
   ];
   
-  // New detailed info for network map visualization
+  // New detailed info for network nodes visualization
   const networkNodes = [
-    { id: 'NY', name: 'New York', status: 'online', connections: 18 },
-    { id: 'SF', name: 'San Francisco', status: 'online', connections: 16 },
-    { id: 'CHI', name: 'Chicago', status: 'online', connections: 14 },
-    { id: 'ATL', name: 'Atlanta', status: 'online', connections: 12 },
-    { id: 'DC', name: 'Washington DC', status: 'online', connections: 15 },
-    { id: 'HOU', name: 'Houston', status: 'degraded', connections: 9 },
+    { id: 'NY', name: 'New York', status: 'online', connections: 18, position: { x: 30, y: 30 } },
+    { id: 'SF', name: 'San Francisco', status: 'online', connections: 16, position: { x: 70, y: 20 } },
+    { id: 'CHI', name: 'Chicago', status: 'online', connections: 14, position: { x: 40, y: 40 } },
+    { id: 'ATL', name: 'Atlanta', status: 'online', connections: 12, position: { x: 35, y: 60 } },
+    { id: 'DC', name: 'Washington DC', status: 'online', connections: 15, position: { x: 50, y: 35 } },
+    { id: 'HOU', name: 'Houston', status: 'degraded', connections: 9, position: { x: 40, y: 70 } },
+    { id: 'LA', name: 'Los Angeles', status: 'online', connections: 17, position: { x: 80, y: 60 } },
+    { id: 'SEA', name: 'Seattle', status: 'online', connections: 13, position: { x: 75, y: 15 } },
+    { id: 'MIA', name: 'Miami', status: 'online', connections: 11, position: { x: 60, y: 80 } },
   ];
+  
+  // Generate connection paths between nodes
+  const networkConnections = generateConnections(networkNodes);
   
   // Get current active data
   const activeData = statusData[activeTab];
@@ -221,7 +226,7 @@ const StatusPanel = () => {
             </div>
           </div>
           
-          {/* Right sidebar - Network Map mini visualization */}
+          {/* Right sidebar - Network Map interactive visualization */}
           <div className="bg-white/5 rounded-xl p-4">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center">
@@ -231,22 +236,98 @@ const StatusPanel = () => {
               <div className="text-xs text-gray-400">Active Nodes</div>
             </div>
             
-            <div className="relative h-64 mb-4 overflow-hidden rounded-lg">
-              <img 
-                src="/lovable-uploads/833e81d2-3114-4243-a1d2-7260de76dfc4.png" 
-                alt="Mini logical map" 
-                className="object-cover object-center w-full h-full opacity-70 hover:opacity-100 transition-opacity duration-300" 
-              />
-              
-              {/* Overlay glowing nodes */}
+            <div className="relative h-64 mb-4 overflow-hidden rounded-lg bg-gradient-to-br from-esnet-dark/90 to-esnet-darker">
+              {/* Interactive Network Visualization */}
               <div className="absolute inset-0">
-                {/* Simulated network nodes - positioned approximately */}
-                <div className="absolute left-[30%] top-[30%] w-2 h-2 bg-green-400 rounded-full shadow-[0_0_10px_3px_rgba(49,196,141,0.6)]"></div>
-                <div className="absolute left-[70%] top-[20%] w-2 h-2 bg-green-400 rounded-full shadow-[0_0_10px_3px_rgba(49,196,141,0.6)]"></div>
-                <div className="absolute left-[80%] top-[60%] w-2 h-2 bg-yellow-400 rounded-full shadow-[0_0_10px_3px_rgba(222,186,19,0.6)] animate-pulse"></div>
-                <div className="absolute left-[20%] top-[60%] w-2 h-2 bg-green-400 rounded-full shadow-[0_0_10px_3px_rgba(49,196,141,0.6)]"></div>
-                <div className="absolute left-[50%] top-[40%] w-2 h-2 bg-green-400 rounded-full shadow-[0_0_10px_3px_rgba(49,196,141,0.6)]"></div>
-                <div className="absolute left-[45%] top-[70%] w-2 h-2 bg-green-400 rounded-full shadow-[0_0_10px_3px_rgba(49,196,141,0.6)]"></div>
+                <svg width="100%" height="100%" viewBox="0 0 100 100" className="network-visualization">
+                  {/* Background grid */}
+                  <defs>
+                    <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
+                      <path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="0.5" />
+                    </pattern>
+                  </defs>
+                  <rect width="100" height="100" fill="url(#grid)" />
+                  
+                  {/* Connection lines between nodes */}
+                  <g className="connections">
+                    {networkConnections.map((conn, idx) => (
+                      <line
+                        key={`conn-${idx}`}
+                        x1={conn.source.position.x}
+                        y1={conn.source.position.y}
+                        x2={conn.target.position.x}
+                        y2={conn.target.position.y}
+                        stroke={conn.critical ? 'rgba(255, 179, 54, 0.6)' : 'rgba(0, 163, 255, 0.4)'}
+                        strokeWidth={conn.bandwidth / 10}
+                        strokeDasharray={conn.status === 'degraded' ? "1,1" : undefined}
+                      >
+                        <animate 
+                          attributeName="stroke-opacity" 
+                          values="0.4;0.8;0.4" 
+                          dur="3s" 
+                          repeatCount="indefinite" 
+                          begin={`${Math.random() * 3}s`} 
+                        />
+                      </line>
+                    ))}
+                  </g>
+                  
+                  {/* Data flow animations */}
+                  {networkConnections.map((conn, idx) => (
+                    <circle
+                      key={`flow-${idx}`}
+                      r="0.7"
+                      fill={conn.critical ? '#FFB336' : '#00A3FF'}
+                      opacity="0.8"
+                    >
+                      <animateMotion
+                        path={`M${conn.source.position.x},${conn.source.position.y} L${conn.target.position.x},${conn.target.position.y}`}
+                        dur={`${1 + Math.random() * 3}s`}
+                        repeatCount="indefinite"
+                        begin={`${Math.random() * 2}s`}
+                      />
+                    </circle>
+                  ))}
+                  
+                  {/* Network nodes */}
+                  {networkNodes.map((node) => (
+                    <g key={node.id} transform={`translate(${node.position.x}, ${node.position.y})`}>
+                      {/* Pulsing circle background */}
+                      <circle
+                        r="2.5"
+                        fill={node.status === 'online' ? 'rgba(54, 255, 181, 0.2)' : 'rgba(255, 179, 54, 0.2)'}
+                      >
+                        <animate
+                          attributeName="r"
+                          values="2.5;3.5;2.5"
+                          dur="3s"
+                          repeatCount="indefinite"
+                          begin={`${Math.random() * 2}s`}
+                        />
+                      </circle>
+                      
+                      {/* Node center */}
+                      <circle
+                        r="1.2"
+                        fill={node.status === 'online' ? '#36FFB5' : '#FFB336'}
+                        stroke="rgba(255,255,255,0.3)"
+                        strokeWidth="0.3"
+                      />
+                      
+                      {/* Node label */}
+                      <text
+                        x="0"
+                        y="4"
+                        textAnchor="middle"
+                        fill="white"
+                        fontSize="2"
+                        fontFamily="sans-serif"
+                      >
+                        {node.id}
+                      </text>
+                    </g>
+                  ))}
+                </svg>
               </div>
             </div>
             
@@ -288,6 +369,34 @@ function generateRandomPoints(count: number): number[] {
   }
   
   return points;
+}
+
+// Helper function to generate connections between nodes
+function generateConnections(nodes: any[]) {
+  const connections = [];
+  
+  // Add direct connections between major nodes
+  for (let i = 0; i < nodes.length; i++) {
+    // Connect to 2-3 other nodes
+    const connectCount = Math.floor(Math.random() * 2) + 2;
+    
+    for (let j = 0; j < connectCount; j++) {
+      const targetIdx = (i + j + 1) % nodes.length;
+      
+      // Skip if it's the same node
+      if (targetIdx === i) continue;
+      
+      connections.push({
+        source: nodes[i],
+        target: nodes[targetIdx],
+        bandwidth: Math.floor(Math.random() * 40) + 10, // 10-50 bandwidth
+        status: Math.random() > 0.9 ? 'degraded' : 'normal',
+        critical: Math.random() > 0.8,
+      });
+    }
+  }
+  
+  return connections;
 }
 
 export default StatusPanel;
