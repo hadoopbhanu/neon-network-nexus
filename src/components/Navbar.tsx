@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
-import { Circuit, Layers, Network, Lock, Server, Settings, User } from 'lucide-react';
+import { CircuitBoard, Layers, Network, Lock, Server, Settings, User } from 'lucide-react';
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -34,7 +34,7 @@ const Navbar = () => {
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center space-x-1">
           {[
-            { name: 'Network', icon: <Circuit className="w-4 h-4" /> },
+            { name: 'Network', icon: <CircuitBoard className="w-4 h-4" /> },
             { name: 'Services', icon: <Layers className="w-4 h-4" /> },
             { name: 'Infrastructure', icon: <Server className="w-4 h-4" /> },
             { name: 'Security', icon: <Lock className="w-4 h-4" /> },
@@ -89,7 +89,7 @@ const Navbar = () => {
       )}>
         <div className="p-6 space-y-4">
           {[
-            { name: 'Network', icon: <Circuit className="w-5 h-5" /> },
+            { name: 'Network', icon: <CircuitBoard className="w-5 h-5" /> },
             { name: 'Services', icon: <Layers className="w-5 h-5" /> },
             { name: 'Infrastructure', icon: <Server className="w-5 h-5" /> },
             { name: 'Security', icon: <Lock className="w-5 h-5" /> },

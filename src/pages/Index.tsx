@@ -8,7 +8,7 @@ import StatusPanel from '@/components/StatusPanel';
 import FeatureCard from '@/components/FeatureCard';
 import Footer from '@/components/Footer';
 import { 
-  Circuit, 
+  CircuitBoard, 
   Server, 
   Globe, 
   Shield, 
@@ -23,7 +23,8 @@ import {
 const Index = () => {
   const [loaded, setLoaded] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
-  const [featuresRef, featuresInView] = useInView({ threshold: 0.1 });
+  const featuresRef = useRef<HTMLDivElement>(null);
+  const [featuresInView, setFeaturesInView] = useState(false);
   
   useEffect(() => {
     // Animation sequence on load
@@ -44,12 +45,31 @@ const Index = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
   
+  // Setup intersection observer for features section
+  useEffect(() => {
+    if (!featuresRef.current) return;
+    
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        setFeaturesInView(true);
+      }
+    }, { threshold: 0.1 });
+    
+    observer.observe(featuresRef.current);
+    
+    return () => {
+      if (featuresRef.current) {
+        observer.unobserve(featuresRef.current);
+      }
+    };
+  }, [featuresRef]);
+  
   // Feature cards data
   const features = [
     {
       title: 'High-Performance Networking',
       description: 'Experience ultra-low latency and massive throughput across global research networks.',
-      icon: <Circuit className="w-6 h-6" />,
+      icon: <CircuitBoard className="w-6 h-6" />,
       accentColor: 'blue' as const,
     },
     {
@@ -157,7 +177,7 @@ const Index = () => {
       
       {/* Features Section */}
       <section 
-        ref={featuresRef as React.RefObject<HTMLDivElement>} 
+        ref={featuresRef} 
         id="features" 
         className="py-20 px-6 lg:px-10 relative"
       >

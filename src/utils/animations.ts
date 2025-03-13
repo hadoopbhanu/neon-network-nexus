@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, RefObject } from 'react';
 
 // Intersection Observer hook for triggering animations when element is visible
 export const useInView = (options = {}) => {
@@ -55,4 +55,27 @@ export const useParallax = () => {
   }, []);
 
   return position;
+};
+
+// Simple hook to check if an element is visible
+export const useIsVisible = (ref: RefObject<HTMLElement>) => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    if (!ref.current) return;
+
+    const observer = new IntersectionObserver(([entry]) => {
+      setIsVisible(entry.isIntersecting);
+    }, { threshold: 0.1 });
+
+    observer.observe(ref.current);
+
+    return () => {
+      if (ref.current) {
+        observer.unobserve(ref.current);
+      }
+    };
+  }, [ref]);
+
+  return isVisible;
 };
