@@ -372,7 +372,13 @@ function generateRandomPoints(count: number): number[] {
 }
 
 // Helper function to generate connections between nodes
-function generateConnections(nodes: any[]) {
+function generateConnections(nodes: {
+  id: string;
+  name: string;
+  status: string;
+  connections: number;
+  position: { x: number; y: number };
+}[]) {
   const connections = [];
   
   // Add direct connections between major nodes

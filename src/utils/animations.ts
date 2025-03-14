@@ -63,17 +63,19 @@ export const useIsVisible = (ref: RefObject<HTMLElement>) => {
 
   useEffect(() => {
     if (!ref.current) return;
-
+    
+    // Store a reference to the current element
+    const currentElement = ref.current;
+    
     const observer = new IntersectionObserver(([entry]) => {
       setIsVisible(entry.isIntersecting);
     }, { threshold: 0.1 });
 
-    observer.observe(ref.current);
+    observer.observe(currentElement);
 
     return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
-      }
+      // Use the stored reference in the cleanup function
+      observer.unobserve(currentElement);
     };
   }, [ref]);
 

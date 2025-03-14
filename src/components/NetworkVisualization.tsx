@@ -61,7 +61,7 @@ const NetworkVisualization = () => {
       window.removeEventListener('resize', handleResize);
       cancelAnimationFrame(animationRef.current);
     };
-  }, []);
+  }, [colors]);
 
   // Animation loop
   useEffect(() => {
