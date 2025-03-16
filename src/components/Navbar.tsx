@@ -35,10 +35,10 @@ const Navbar = () => {
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center space-x-1">
           {[
-            { name: 'Network', icon: <CircuitBoard className="w-4 h-4" />, path: '/#network' },
-            { name: 'Services', icon: <Layers className="w-4 h-4" />, path: '/#services' },
-            { name: 'Infrastructure', icon: <Server className="w-4 h-4" />, path: '/#infrastructure' },
-            { name: 'Security', icon: <Lock className="w-4 h-4" />, path: '/#security' },
+            { name: 'Network', icon: <CircuitBoard className="w-4 h-4" />, path: '/network' },
+            { name: 'Services', icon: <Layers className="w-4 h-4" />, path: '/services' },
+            { name: 'Infrastructure', icon: <Server className="w-4 h-4" />, path: '/infrastructure' },
+            { name: 'Security', icon: <Lock className="w-4 h-4" />, path: '/security' },
             { name: 'About', icon: <Info className="w-4 h-4" />, path: '/about' },
           ].map((item, i) => (
             <Link
@@ -91,10 +91,10 @@ const Navbar = () => {
       )}>
         <div className="p-6 space-y-4">
           {[
-            { name: 'Network', icon: <CircuitBoard className="w-5 h-5" />, path: '/#network' },
-            { name: 'Services', icon: <Layers className="w-5 h-5" />, path: '/#services' },
-            { name: 'Infrastructure', icon: <Server className="w-5 h-5" />, path: '/#infrastructure' },
-            { name: 'Security', icon: <Lock className="w-5 h-5" />, path: '/#security' },
+            { name: 'Network', icon: <CircuitBoard className="w-5 h-5" />, path: '/network' },
+            { name: 'Services', icon: <Layers className="w-5 h-5" />, path: '/services' },
+            { name: 'Infrastructure', icon: <Server className="w-5 h-5" />, path: '/infrastructure' },
+            { name: 'Security', icon: <Lock className="w-5 h-5" />, path: '/security' },
             { name: 'About', icon: <Info className="w-5 h-5" />, path: '/about' },
           ].map((item) => (
             <Link
