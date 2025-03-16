@@ -192,8 +192,8 @@ docker run -p 8080:80 esnet-${section}
 `;
   fs.writeFileSync(`${appDir}/README.md`, readmeContent);
   
-  // Create Dockerfile
-  const dockerfileContent = `FROM node:18-alpine as build
+  // Create Dockerfile with consistent casing
+  const dockerfileContent = `FROM node:18-alpine AS build
 
 WORKDIR /app
 
