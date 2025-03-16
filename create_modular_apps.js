@@ -1,6 +1,6 @@
 
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
 // Define the sections to create as separate apps
 const sections = ['network', 'services', 'infrastructure', 'security', 'about', 'index'];
