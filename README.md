@@ -1,69 +1,145 @@
-# Welcome to your Lovable project
 
-## Project info
+# ESnet Modular Applications
 
-**URL**: https://lovable.dev/projects/a2041b29-17b8-42e8-ad0f-512650b64efc
+This project has been modularized into separate, self-contained applications for each section:
 
-## How can I edit this code?
+- `index_app` - The main landing page
+- `network_app` - Network infrastructure section
+- `services_app` - Services section
+- `infrastructure_app` - Infrastructure section
+- `security_app` - Security section
+- `about_app` - About section
 
-There are several ways of editing your application.
+## Creating the Modular Apps
 
-**Use Lovable**
+Run the following command to generate all the modular applications:
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/a2041b29-17b8-42e8-ad0f-512650b64efc) and start prompting.
+```
+node create_modular_apps.js
+```
 
-Changes made via Lovable will be committed automatically to this repo.
+## Building Individual Applications
 
-**Use your preferred IDE**
+Each application can be built and deployed independently. Navigate to any app directory and:
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+1. Install dependencies:
+```
+cd network_app
+npm install
+```
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+2. Run in development mode:
+```
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+3. Build for production:
+```
+npm run build
+```
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+4. Deploy using Docker:
+```
+docker build -t esnet-network .
+docker run -p 8080:80 esnet-network
+```
 
-**Use GitHub Codespaces**
+## Kubernetes Deployment
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+Each application can be deployed as a separate pod in Kubernetes. Sample deployment files are included in each app directory.
 
-## What technologies are used for this project?
+Example Kubernetes deployment:
 
-This project is built with .
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: esnet-network
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: esnet-network
+  template:
+    metadata:
+      labels:
+        app: esnet-network
+    spec:
+      containers:
+      - name: esnet-network
+        image: esnet-network:latest
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: esnet-network-service
+spec:
+  selector:
+    app: esnet-network
+  ports:
+  - port: 80
+    targetPort: 80
+  type: ClusterIP
+```
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Path-Based Routing in Kubernetes
 
-## How can I deploy this project?
+To set up path-based routing in Kubernetes, you can use an Ingress controller:
 
-Simply open [Lovable](https://lovable.dev/projects/a2041b29-17b8-42e8-ad0f-512650b64efc) and click on Share -> Publish.
-
-## I want to use a custom domain - is that possible?
-
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: esnet-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  rules:
+  - host: esnet.example.com
+    http:
+      paths:
+      - path: /(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: esnet-index-service
+            port:
+              number: 80
+      - path: /network(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: esnet-network-service
+            port:
+              number: 80
+      - path: /services(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: esnet-services-service
+            port:
+              number: 80
+      - path: /infrastructure(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: esnet-infrastructure-service
+            port:
+              number: 80
+      - path: /security(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: esnet-security-service
+            port:
+              number: 80
+      - path: /about(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: esnet-about-service
+            port:
+              number: 80
+```
