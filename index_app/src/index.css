@@ -49,6 +49,7 @@
   body {
     @apply bg-esnet-dark text-foreground overflow-x-hidden;
     font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
+    background-color: #030303; /* Fallback color */
   }
   
   /* Typography */
@@ -87,10 +88,12 @@
   /* Glass effect */
   .glass-panel {
     @apply bg-white/10 backdrop-blur-xl border border-white/20 shadow-glass;
+    box-shadow: 0 0 20px rgba(54, 255, 181, 0.15);
   }
   
   .glass-panel-dark {
     @apply bg-black/30 backdrop-blur-xl border border-white/10 shadow-glass;
+    box-shadow: 0 0 20px rgba(54, 255, 181, 0.15);
   }
   
   /* Text gradients */
@@ -146,5 +149,19 @@
   
   .hover-scale {
     @apply transition-transform duration-300 hover:scale-105;
+  }
+  
+  /* Neon effects */
+  .neon-glow {
+    text-shadow: 0 0 5px rgba(54, 255, 181, 0.7), 0 0 10px rgba(54, 255, 181, 0.5);
+  }
+  
+  .neon-box {
+    box-shadow: 0 0 10px rgba(54, 255, 181, 0.5), 0 0 20px rgba(54, 255, 181, 0.3);
+  }
+  
+  .neon-border {
+    border: 1px solid rgba(54, 255, 181, 0.5);
+    box-shadow: 0 0 5px rgba(54, 255, 181, 0.5);
   }
 }
