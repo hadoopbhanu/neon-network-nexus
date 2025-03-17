@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import NeuralNetworkVisualization from '@/components/NeuralNetworkVisualization';
 import NeuralControls from '@/components/NeuralControls';
 

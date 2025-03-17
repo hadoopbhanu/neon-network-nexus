@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 interface NeuralNode {
   x: number;
@@ -168,8 +168,8 @@ const NeuralNetworkVisualization = ({
             const target = nodes[j];
             const dx = target.x - node.x;
             const dy = target.y - node.y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-            const opacity = 1 - distance / connectionDistance;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            const opacity = 1 - dist / connectionDistance;
             
             // Draw connection line
             ctx.beginPath();
@@ -193,7 +193,6 @@ const NeuralNetworkVisualization = ({
             const target = nodes[pulse.target];
             const dx = target.x - node.x;
             const dy = target.y - node.y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
             
             // Position along the line
             const progress = pulse.progress;

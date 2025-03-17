@@ -2,14 +2,16 @@
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
 
+interface Settings {
+  nodeCount: number;
+  connectionDistance: number;
+  nodeSpeed: number;
+  pulseSpeed: number;
+}
+
 interface NeuralControlsProps {
-  settings: {
-    nodeCount: number;
-    connectionDistance: number;
-    nodeSpeed: number;
-    pulseSpeed: number;
-  };
-  updateSettings: (newSettings: Partial<typeof settings>) => void;
+  settings: Settings;
+  updateSettings: (newSettings: Partial<Settings>) => void;
 }
 
 const NeuralControls = ({ settings, updateSettings }: NeuralControlsProps) => {
